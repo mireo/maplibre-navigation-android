@@ -5,6 +5,7 @@ import android.app.Application;
 import com.mapbox.mapboxsdk.Mapbox;
 
 import timber.log.Timber;
+import timber.log.Timber.DebugTree;
 
 public class NavigationApplication extends Application {
 
@@ -16,7 +17,7 @@ public class NavigationApplication extends Application {
     super.onCreate();
 
     if (BuildConfig.DEBUG) {
-      Timber.plant(new Timber.DebugTree());
+      Timber.plant(new DebugTree());
     }
 
     Mapbox.getInstance(getApplicationContext());
