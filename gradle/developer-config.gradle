@@ -5,10 +5,10 @@
 task accessToken {
   def tokenFile = new File("${projectDir}/src/main/res/values/developer-config.xml")
   if (!tokenFile.exists()) {
-    String mapboxAccessToken = "$System.env.MAPBOX_ACCESS_TOKEN"
+    String mapboxAccessToken = "pk.dummy.token.mireo.mapbox.api.ImNqOHg0bzlqeDF3Z20ycXFxcXRrZ3VvNG4ifQ.OxmT2cJG1PGA34tse_ILSw"
     if (mapboxAccessToken == "null") {
       System.out.println("You should set the MAPBOX_ACCESS_TOKEN environment variable.")
-      mapboxAccessToken = "YOUR_MAPBOX_ACCESS_TOKEN_GOES_HERE"
+      mapboxAccessToken = "pk.crowc"
     }
     String tokenFileContents = "<?xml version=\"1.0\" encoding=\"utf-8\"?>\n" +
       "<resources>\n" +

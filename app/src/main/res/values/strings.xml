@@ -52,4 +52,7 @@
     <string name="error_select_longer_route">Please select a longer route</string>
     <string name="error_valid_route_not_found">Valid route not found.</string>
     <string name="explanation_long_press_waypoint">Long press map to place waypoint</string>
+
+	<string name="title_local_mock_navigation">Offline Mock Navigation</string>
+    <string name="description_local_mock_navigation">Mock a navigation session using offline maps.</string>
 </resources>

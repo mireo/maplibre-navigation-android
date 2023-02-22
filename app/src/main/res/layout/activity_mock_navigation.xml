@@ -5,7 +5,7 @@
     android:id="@+id/container"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    tools:context=".MockNavigationActivity">
+    tools:context=".MockNavigationActivityJava">
 
     <com.mapbox.mapboxsdk.maps.MapView
         android:id="@+id/mapView"
@@ -74,7 +74,7 @@
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintBottom_toBottomOf="parent" />
 
-    <TextView
+    <LinearLayout
         android:id="@+id/bannerText"
         android:layout_width="0dp"
         android:layout_height="wrap_content"
@@ -86,6 +86,6 @@
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toTopOf="parent"
-        tools:text="Banner Text" />
+        android:orientation="horizontal" />
 
 </androidx.constraintlayout.widget.ConstraintLayout>

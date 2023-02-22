@@ -41,7 +41,14 @@ public class MainActivity extends AppCompatActivity implements PermissionsListen
         list.add(new SampleItem(
                 getString(R.string.title_mock_navigation),
                 getString(R.string.description_mock_navigation),
-                MockNavigationActivity.class
+                MockNavigationActivity.class,
+                false
+        ));
+        list.add(new SampleItem(
+                getString(R.string.title_local_mock_navigation),
+                getString(R.string.description_local_mock_navigation),
+                MockNavigationActivity.class,
+                true
         ));
         RecyclerView.Adapter adapter = new MainAdapter(list);
         recyclerView.setAdapter(adapter);
@@ -111,6 +118,8 @@ public class MainActivity extends AppCompatActivity implements PermissionsListen
             view.setOnClickListener(clickedView -> {
                 int position = recyclerView.getChildLayoutPosition(clickedView);
                 Intent intent = new Intent(clickedView.getContext(), samples.get(position).getActivity());
+                if (samples.get(position).isLocal())
+                    intent.putExtra("localFolder", "/__A/");
                 startActivity(intent);
             });
 

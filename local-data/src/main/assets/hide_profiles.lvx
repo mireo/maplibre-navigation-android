@@ -1,0 +1,174 @@
+<pencilbox version="2.0">
+	<profiles>
+		<point key="1-999" hidezf="2004992" />
+		<line key="1000-1999" gmw="1" pixrefw="1" pixrefzf="2004992" hidezf="2004992" />
+		<area key="2000-2999" hidezf="2004992" />
+
+		<point key="1" hidezf="32768" />
+		<point key="2" hidezf="8192" />
+		<point key="11" hidezf="16384" />
+		<point key="12" hidezf="8192" />
+		<point key="13" hidezf="8192" />
+		<point key="14" hidezf="4096" />
+		<point key="15" hidezf="4096" />
+		<point key="16" hidezf="1024" />
+		<point key="17" hidezf="1024" />
+		<point key="18" hidezf="1024" />
+		<point key="21" hidezf="262144" />
+		<point key="23" hidezf="65536" />
+		<point key="24" hidezf="32768" />
+		<point key="25" hidezf="4" />
+		<point key="26" hidezf="1024" />
+		<point key="27" hidezf="512" />
+		<point key="28" hidezf="128" />
+		<point key="29" hidezf="64" />
+		<point key="30" hidezf="32" />
+		<point key="31" hidezf="16" />
+		<point key="32" hidezf="8" />
+		<point key="33" hidezf="8" />
+		<point key="34" hidezf="8" />
+		<point key="35" hidezf="8" />
+		<point key="36" hidezf="8" />
+		<point key="37" hidezf="8" />
+		<point key="38" hidezf="8" />
+		<point key="39" hidezf="8" />
+		<point key="42" hidezf="8192" />
+		<point key="43" hidezf="8192" />
+		<point key="44" hidezf="4096" />
+		<point key="45" hidezf="4096" />
+		<point key="46" hidezf="32" />
+		<point key="51" hidezf="262144" />
+		<point key="52" hidezf="16384" />
+		<point key="61" hidezf="131072" />
+		<point key="62" hidezf="65536" />
+		<point key="63" hidezf="32768" />
+		<point key="64" hidezf="32768" />
+		<point key="80" hidezf="64" />
+		<point key="99" hidezf="32" />
+		<point key="97" hidezf="8" />
+		<point key="920" hidezf="32" />
+		<point key="98" hidezf="32" />
+		<point key="922" hidezf="32" />
+		<line key="1005" gmw="1" pixrefw="1" pixrefzf="64" hidezf="64" />
+		<line key="1007" gmw="1" pixrefw="1" pixrefzf="64" hidezf="64" />
+		<line key="1010" gmw="1" pixrefw="1" pixrefzf="65536" hidezf="65536" />
+		<line key="1016" gmw="1" pixrefw="1" pixrefzf="65536" hidezf="65536" />
+		<line key="1018" gmw="1" pixrefw="1" pixrefzf="65536" hidezf="65536" />
+		<line key="1020" gmw="1" pixrefw="1" pixrefzf="8192" hidezf="8192" />
+		<line key="1026" gmw="1" pixrefw="1" pixrefzf="8192" hidezf="8192" />
+		<line key="1028" gmw="1" pixrefw="1" pixrefzf="8192" hidezf="8192" />
+		<line key="1030" gmw="1" pixrefw="1" pixrefzf="8192" hidezf="8192" />
+		<line key="1036" gmw="1" pixrefw="1" pixrefzf="8192" hidezf="8192" />
+		<line key="1038" gmw="1" pixrefw="1" pixrefzf="8192" hidezf="8192" />
+		<line key="1040" gmw="1" pixrefw="1" pixrefzf="4096" hidezf="4096" />
+		<line key="1046" gmw="1" pixrefw="1" pixrefzf="4096" hidezf="4096" />
+		<line key="1048" gmw="1" pixrefw="1" pixrefzf="4096" hidezf="4096" />
+		<line key="1050" gmw="1" pixrefw="1" pixrefzf="4096" hidezf="4096" />
+		<line key="1056" gmw="1" pixrefw="1" pixrefzf="2048" hidezf="2048" />
+		<line key="1058" gmw="1" pixrefw="1" pixrefzf="2048" hidezf="2048" />
+		<line key="1060" gmw="1" pixrefw="1" pixrefzf="1024" hidezf="1024" />
+		<line key="1066" gmw="1" pixrefw="1" pixrefzf="512" hidezf="512" />
+		<line key="1068" gmw="1" pixrefw="1" pixrefzf="512" hidezf="512" />
+		<line key="1070" gmw="1" pixrefw="1" pixrefzf="512" hidezf="512" />
+		<line key="1076" gmw="1" pixrefw="1" pixrefzf="256" hidezf="256" />
+		<line key="1078" gmw="1" pixrefw="1" pixrefzf="256" hidezf="256" />
+		<line key="1080" gmw="1" pixrefw="1" pixrefzf="128" hidezf="128" />
+		<line key="1086" gmw="1" pixrefw="1" pixrefzf="64" hidezf="64" />
+		<line key="1088" gmw="1" pixrefw="1" pixrefzf="128" hidezf="128" />
+		<line key="1100" gmw="1" pixrefw="1" pixrefzf="8192" hidezf="8192" />
+		<line key="1205" gmw="1" pixrefw="1" pixrefzf="32" hidezf="32" />
+		<line key="1221" gmw="1" pixrefw="1" pixrefzf="4096" hidezf="4096" />
+		<line key="1222" gmw="1" pixrefw="1" pixrefzf="4096" hidezf="4096" />
+		<line key="1410" gmw="1" pixrefw="1" pixrefzf="4096" hidezf="4096" />
+		<line key="1411" gmw="1" pixrefw="1" pixrefzf="16384" hidezf="16384" />
+		<line key="1412" gmw="1" pixrefw="1" pixrefzf="8192" hidezf="8192" />
+		<line key="1413" gmw="1" pixrefw="1" pixrefzf="8192" hidezf="8192" />
+		<line key="1414" gmw="1" pixrefw="1" pixrefzf="4096" hidezf="4096" />
+		<line key="1415" gmw="1" pixrefw="1" pixrefzf="16384" hidezf="16384" />
+		<line key="1420" gmw="1" pixrefw="1" pixrefzf="16384" hidezf="16384" />
+		<line key="1500" gmw="1" pixrefw="1" pixrefzf="128" hidezf="128" />
+		<line key="1501" gmw="1" pixrefw="1" pixrefzf="32" hidezf="32" />
+		<line key="1503" gmw="1" pixrefw="1" pixrefzf="32" hidezf="32" />
+		<line key="1990" gmw="1" pixrefw="1" pixrefzf="524288" hidezf="524288" />
+		<line key="1991" gmw="1" pixrefw="1" pixrefzf="524288" hidezf="524288" />
+		<area key="2061" hidezf="256" />
+		<area key="2101" hidezf="512" />
+		<area key="2102" hidezf="1024" />
+		<area key="2110" hidezf="4096" />
+		<area key="2130" hidezf="1024" />
+		<area key="2141" hidezf="4096" />
+		<area key="2150" hidezf="1024" />
+		<area key="2151" hidezf="1024" />
+		<area key="2170" hidezf="2048" />
+		<area key="2180" hidezf="128" />
+		<area key="2181" hidezf="128" />
+		<area key="2182" hidezf="128" />
+		<area key="2183" hidezf="128" />
+		<area key="2184" hidezf="128" />
+		<area key="2400" hidezf="16" />
+		<area key="2402" hidezf="128" />
+		<area key="2404" hidezf="128" />
+		<area key="2411" hidezf="128" />
+		<area key="2412" hidezf="128" />
+		<area key="2421" hidezf="128" />
+		<area key="2430" hidezf="256" />
+		<area key="2431" hidezf="256" />
+		<area key="2450" hidezf="256" />
+		<area key="2451" hidezf="128" />
+		<area key="2452" hidezf="256" />
+		<area key="2470" hidezf="256" />
+		<area key="2480" hidezf="256" />
+		<area key="2483" hidezf="256" />
+		<area key="2486" hidezf="256" />
+		<area key="2500" hidezf="256" />
+		<area key="2541" hidezf="256" />
+		<area key="2560" hidezf="256" />
+		<area key="2630" hidezf="64" />
+		<area key="2650" hidezf="2048" />
+		<area key="2652" hidezf="512" />
+		<area key="2660" hidezf="128" />
+		<area key="2661" hidezf="128" />
+		<area key="2662" hidezf="128" />
+		<area key="2663" hidezf="128" />
+		<area key="2664" hidezf="128" />
+		<area key="2665" hidezf="128" />
+		<area key="2666" hidezf="128" />
+		<area key="2667" hidezf="128" />
+		<area key="2668" hidezf="128" />
+		<area key="2669" hidezf="128" />
+		<area key="2670" hidezf="128" />
+		<area key="2671" hidezf="128" />
+		<area key="2672" hidezf="128" />
+		<area key="2673" hidezf="128" />
+		<area key="2674" hidezf="128" />
+		<area key="2691" hidezf="4096" />
+		<area key="2692" hidezf="4096" />
+		<area key="2701" hidezf="1024" />
+		<area key="2702" hidezf="1024" />
+		<area key="2703" hidezf="1024" />
+		<area key="2704" hidezf="1024" />
+		<area key="2705" hidezf="1024" />
+		<area key="2706" hidezf="1024" />
+		<area key="2707" hidezf="1024" />
+		<area key="2708" hidezf="1024" />
+		<area key="2709" hidezf="1024" />
+		<area key="2710" hidezf="1024" />
+		<area key="2711" hidezf="1024" />
+		<area key="2712" hidezf="1024" />
+		<area key="2713" hidezf="1024" />
+		<area key="2801" hidezf="4096" />
+		<area key="2802" hidezf="4096" />
+		<area key="2803" hidezf="4096" />
+		<area key="2804" hidezf="4096" />
+		<area key="2805" hidezf="4096" />
+		<area key="2806" hidezf="4096" />
+		<area key="2807" hidezf="4096" />
+		<area key="2808" hidezf="4096" />
+		<area key="2809" hidezf="4096" />
+		<area key="2810" hidezf="4096" />
+		<area key="2811" hidezf="4096" />
+		<area key="2812" hidezf="4096" />
+		<area key="2813" hidezf="4096" />
+		<area key="2814" hidezf="4096" />
+	</profiles>
+</pencilbox>

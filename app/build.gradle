@@ -29,6 +29,14 @@ android {
         }
     }
 
+    packagingOptions {
+        pickFirst '**/armeabi-v7a/libmapbox-gl.so'
+        pickFirst '**/x86/libmapbox-gl.so'
+        pickFirst '**/arm64-v8a/libmapbox-gl.so'
+        pickFirst '**/x86_64/libmapbox-gl.so'
+        pickFirst '**/x86/libmapbox-gl.so'
+    }
+
     dexOptions {
         maxProcessCount 8
         javaMaxHeapSize "2g"
@@ -46,8 +54,10 @@ android {
 
 dependencies {
     // Flitsmeister Navigation SDK
+    implementation files("libs/localserver-release.aar")
     implementation project(':libandroid-navigation')
-    implementation(dependenciesList.mapLibre) {
+    implementation project(':local-data')
+    implementation(dependenciesList.mapLibre){
         exclude group: 'com.mapbox.mapboxsdk', module: 'mapbox-sdk-geojson'
         exclude group: 'com.mapbox.mapboxsdk', module: 'mapbox-sdk-turf'
     }

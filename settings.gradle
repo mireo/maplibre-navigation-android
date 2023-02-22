@@ -1,2 +1,3 @@
 include ':app'
 include ':libandroid-navigation'
+include ':local-data'
