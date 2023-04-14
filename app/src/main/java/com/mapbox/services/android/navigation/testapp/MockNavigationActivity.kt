@@ -410,11 +410,11 @@ class MockNavigationActivity : AppCompatActivity(), OnMapReadyCallback, MapboxMa
     }
 
     companion object{
-        private const val REMOTE_STYLE_URL = "https://office.mireo.hr/maps/style/mireo-style-traffic.json"
-        private const val REMOTE_BASE_URL = "https://office.mireo.hr/maps/"
+        private const val REMOTE_STYLE_URL = "https://maps.mireo.com/style/mireo-style.json"
+        private const val REMOTE_BASE_URL = "https://maps.mireo.com/"
         private const val LOCAL_STYLE_URL = "http://localhost:4242/style/mireo-style.json"
         private const val LOCAL_BASE_URL = "http://localhost:4242/"
-        private const val MAP_UPDATE_URL = "https://maps.mireo.hr/cm-listings/maps"
+        private const val MAP_UPDATE_URL = "https://maps.mireo.hr/cm-listings/maps/1710070318"
     }
 
     private var STYLE_URL: String = REMOTE_STYLE_URL
