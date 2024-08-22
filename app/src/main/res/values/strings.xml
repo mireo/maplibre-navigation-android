@@ -4,6 +4,12 @@
     <string name="title_mock_navigation">Mock Navigation</string>
     <string name="description_mock_navigation">Mock a navigation session using a mock location engine.</string>
 
+    <string name="title_navigation_ui">Navigation UI</string>
+    <string name="description_navigation_ui">Showcase a Navigation UI session. Optional with simulation.</string>
+
+    <string name="title_snap_to_route">Snap to route</string>
+    <string name="description_snap_to_route">Use snap to route option to show smoother location updates.</string>
+
     <string name="title_off_route_detection">Off route detection</string>
     <string name="description_off_route_detection">Uses the Route Utils class to determine if a users off route.</string>
 
@@ -52,4 +58,7 @@
     <string name="error_select_longer_route">Please select a longer route</string>
     <string name="error_valid_route_not_found">Valid route not found.</string>
     <string name="explanation_long_press_waypoint">Long press map to place waypoint</string>
+
+	<string name="title_local_mock_navigation">Offline Mock Navigation</string>
+    <string name="description_local_mock_navigation">Mock a navigation session using offline maps.</string>
 </resources>

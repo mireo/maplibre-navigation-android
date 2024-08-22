@@ -1,11 +1,11 @@
 package com.mapbox.services.android.navigation.testapp
 
 import android.Manifest
-import android.annotation.SuppressLint
 import android.content.BroadcastReceiver
 import android.content.Context
 import android.content.Intent
 import android.content.pm.PackageManager
+import android.content.res.AssetManager
 import android.location.Location
 import android.os.Build
 import android.os.Bundle
@@ -17,15 +17,12 @@ import androidx.appcompat.app.AppCompatActivity
 import androidx.core.app.ActivityCompat
 import com.google.android.material.snackbar.Snackbar
 import com.mapbox.api.directions.v5.models.DirectionsResponse
-import com.mapbox.api.directions.v5.models.DirectionsRoute
-import com.mapbox.api.directions.v5.models.RouteOptions
 import com.mapbox.geojson.Point
 import com.mapbox.mapboxsdk.annotations.MarkerOptions
 import com.mapbox.mapboxsdk.camera.CameraPosition
 import com.mapbox.mapboxsdk.geometry.LatLng
 import com.mapbox.mapboxsdk.location.LocationComponentActivationOptions
 import com.mapbox.mapboxsdk.location.engine.LocationEngineCallback
-import com.mapbox.mapboxsdk.location.engine.LocationEngineProvider
 import com.mapbox.mapboxsdk.location.engine.LocationEngineRequest
 import com.mapbox.mapboxsdk.location.engine.LocationEngineResult
 import com.mapbox.mapboxsdk.location.modes.CameraMode
@@ -34,11 +31,17 @@ import com.mapbox.mapboxsdk.maps.MapboxMap
 import com.mapbox.mapboxsdk.maps.OnMapReadyCallback
 import com.mapbox.mapboxsdk.maps.Style
 import com.mapbox.services.android.navigation.testapp.databinding.ActivityMockNavigationBinding
-import com.mapbox.services.android.navigation.v5.milestone.Milestone
-import com.mapbox.services.android.navigation.v5.milestone.VoiceInstructionMilestone
+import com.mapbox.services.android.navigation.ui.v5.route.MapboxRouteFetcher
+import com.mapbox.services.android.navigation.ui.v5.route.NavigationRoute
+import com.mapbox.services.android.navigation.v5.location.engine.LocationEngineProvider
+import com.mapbox.services.android.navigation.v5.milestone.*
+import com.mapbox.services.android.navigation.v5.models.DirectionsRoute
+import com.mapbox.services.android.navigation.v5.models.RouteOptions
 import com.mapbox.services.android.navigation.v5.navigation.*
+import com.mapbox.services.android.navigation.v5.offroute.OffRouteListener
 import com.mapbox.services.android.navigation.v5.route.RouteFetcher
 import com.mapbox.services.android.navigation.v5.route.RouteListener
+import com.mapbox.services.android.navigation.v5.routeprogress.ProgressChangeListener
 import com.mapbox.services.android.navigation.v5.routeprogress.RouteProgress
 import com.mapbox.turf.TurfConstants
 import com.mapbox.turf.TurfMeasurement
@@ -48,7 +51,14 @@ import retrofit2.Response
 import timber.log.Timber
 import java.lang.ref.WeakReference
 
-class MockNavigationActivity : AppCompatActivity(), OnMapReadyCallback, MapboxMap.OnMapClickListener  {
+class MockNavigationActivity :
+    AppCompatActivity(),
+    OnMapReadyCallback,
+    MapboxMap.OnMapClickListener,
+    ProgressChangeListener,
+    NavigationEventListener,
+    MilestoneEventListener,
+    OffRouteListener {
     private val BEGIN_ROUTE_MILESTONE = 1001
     private lateinit var mapboxMap: MapboxMap
     private lateinit var customNotification: CustomNavigationNotification
@@ -68,9 +78,8 @@ class MockNavigationActivity : AppCompatActivity(), OnMapReadyCallback, MapboxMa
     private var maneuverView: ManeuverView? = null
     private var lastLocation: Location? = null
 
-    private lateinit var binding : ActivityMockNavigationBinding
+    private lateinit var binding: ActivityMockNavigationBinding
 
-    @SuppressLint("MissingPermission")
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         binding = ActivityMockNavigationBinding.inflate(layoutInflater)
@@ -85,18 +94,19 @@ class MockNavigationActivity : AppCompatActivity(), OnMapReadyCallback, MapboxMa
             customNotification.createNotificationChannel(this)
         }
         val options = MapboxNavigationOptions.builder()
-                .navigationNotification(customNotification)
-                .build()
+            .navigationNotification(customNotification)
+            .build()
 
-       accessToken = "pk.0"
-       navigation = MapboxNavigation(this, options)
+        accessToken = "pk.0"
+        navigation = MapboxNavigation(this, options)
 
         locationEngine  = SnapToRouteLocationEngine(LocationEngineProvider.getBestLocationEngine(this))
         if (ActivityCompat.checkSelfPermission(this, Manifest.permission.ACCESS_FINE_LOCATION) != PackageManager.PERMISSION_GRANTED
                 && ActivityCompat.checkSelfPermission(this, Manifest.permission.ACCESS_COARSE_LOCATION) != PackageManager.PERMISSION_GRANTED) {
             return
         }
-        locationEngine.requestLocationUpdates(LocationEngineRequest.Builder(1000).build(),
+        locationEngine.requestLocationUpdates(
+            LocationEngineRequest.Builder(1000).build(),
                 object : LocationEngineCallback<LocationEngineResult> {
                     override fun onSuccess(result: LocationEngineResult) {
                         lastLocation = result.lastLocation
@@ -104,11 +114,11 @@ class MockNavigationActivity : AppCompatActivity(), OnMapReadyCallback, MapboxMa
                     override fun onFailure(exception: Exception) {}
                 }, Looper.myLooper()
         )
-        locationEngine  = SnapToRouteLocationEngine(LocationEngineProvider.getBestLocationEngine(this))
-
         binding.startRouteButton.setOnClickListener {
-            binding.startRouteButton.visibility = View.INVISIBLE
-            route?.let { it1 -> startNavigation(it1) }
+            route?.let { route ->
+                binding.startRouteButton.visibility = View.INVISIBLE
+                startNavigation(route)
+            }
         }
 
         binding.newLocationFab.setOnClickListener {
@@ -125,11 +135,11 @@ class MockNavigationActivity : AppCompatActivity(), OnMapReadyCallback, MapboxMa
 
     private fun onClearButtonClicked() {
         if (route != null)
-            stopNavigation();
+            stopNavigation()
         if (waypoints.size > 0)
             clearDestinations()
-        binding.startRouteButton.visibility = View.INVISIBLE;
-        binding.clearPoints.hide();
+        binding.startRouteButton.visibility = View.INVISIBLE
+        binding.clearPoints.hide()
     }
 
     private fun clearDestinations() {
@@ -187,21 +197,25 @@ class MockNavigationActivity : AppCompatActivity(), OnMapReadyCallback, MapboxMa
             locationEngine.routeProgressChanged(null)
         }
 
-        routeFetcher = RouteFetcher(this)
+        routeFetcher = MapboxRouteFetcher(this)
         maneuverView = ManeuverView(this, generateRouteOptions(), options)
         navigationMapRoute = NavigationMapRoute(navigation, binding.mapView, mapboxMap)
         navigationMapRoute.addProgressChangeListener(navigation)
 
         mapboxMap.addOnMapClickListener(this)
-        Snackbar.make(findViewById(R.id.container), "Tap map to place waypoint", Snackbar.LENGTH_LONG).show()
+        Snackbar.make(
+            findViewById(R.id.container),
+            "Tap map to place waypoint",
+            Snackbar.LENGTH_LONG,
+        ).show()
 
     }
 
     private fun generateRouteOptions(): RouteOptions {
-        var coordinates = mutableListOf<Point>();
+        var coordinates = mutableListOf<Point>()
         if (lastLocation != null) {
             val origin = Point.fromLngLat(lastLocation!!.longitude, lastLocation!!.latitude)
-            coordinates.add(origin);
+            coordinates.add(origin)
         }
         coordinates.addAll(waypoints)
         return RouteOptions.builder()
@@ -232,7 +246,9 @@ class MockNavigationActivity : AppCompatActivity(), OnMapReadyCallback, MapboxMa
         val locationComponent = mapboxMap.locationComponent
         locationComponent.let {
             // Activate with a built LocationComponentActivationOptions object
-            it.activateLocationComponent(LocationComponentActivationOptions.builder(this, style).build())
+            it.activateLocationComponent(
+                LocationComponentActivationOptions.builder(this, style).build(),
+            )
 
             // Enable to make component visible
             it.isLocationComponentEnabled = true
@@ -287,12 +303,12 @@ class MockNavigationActivity : AppCompatActivity(), OnMapReadyCallback, MapboxMa
 
         navigationRouteBuilder.build().getRoute(object : Callback<DirectionsResponse> {
             override fun onResponse(call: Call<DirectionsResponse>, response: Response<DirectionsResponse>) {
-                Timber.d("Url: %s", call.request().url().toString())
-                response.body()?.let { r ->
-                    if (r.routes().isNotEmpty()) {
-                        val directionsRoute = r.routes().first()
+                response.body()?.let { response ->
+                    if (response.routes().isNotEmpty()) {
+                        val maplibreResponse = com.mapbox.services.android.navigation.v5.models.DirectionsResponse.fromJson(response.toJson());
+                        val directionsRoute = DirectionsRoute.fromJson(maplibreResponse.routes().first().toJson())
                         this@MockNavigationActivity.route = directionsRoute
-                        navigationMapRoute.addRoutes(r.routes())
+                        navigationMapRoute.addRoutes(maplibreResponse.routes())
                         binding.startRouteButton.visibility = View.VISIBLE
                     }
                 }
@@ -306,15 +322,15 @@ class MockNavigationActivity : AppCompatActivity(), OnMapReadyCallback, MapboxMa
         })
     }
 
-    fun startNavigation(
+    private fun startNavigation(
         result: DirectionsRoute,
     ) {
         route = result
         customNotification.register(MyBroadcastReceiver(navigation), applicationContext)
         navigation.startNavigation(result)
-        maneuverView?.show(this, binding.bannerText)
+        maneuverView?.show(this, findViewById(R.id.bannerText))
         routeFetcher.addRouteListener(object : RouteListener {
-            override fun onResponseReceived(response: DirectionsResponse, routeProgress: RouteProgress?) {
+            override fun onResponseReceived(response: com.mapbox.services.android.navigation.v5.models.DirectionsResponse, routeProgress: RouteProgress?) {
                 Timber.d("onResponseReceived")
                 navigationMapRoute.removeRoute()
                 if (response.routes().isEmpty()) {
@@ -393,8 +409,23 @@ class MockNavigationActivity : AppCompatActivity(), OnMapReadyCallback, MapboxMa
     }
 
     companion object{
-        private const val STYLE_URL = "https://office.mireo.hr/maps/style/mireo-style-traffic.json"
-        private const val BASE_URL = "https://office.mireo.hr/maps/"
+        var STYLE_URL: String = "https://maps.mireo.com/style/mireo-style.json"
+        var BASE_URL: String = "https://maps.mireo.com/"
     }
 
+    override fun onProgressChange(location: Location?, routeProgress: RouteProgress?) {
+    }
+
+    override fun onRunning(running: Boolean) {
+    }
+
+    override fun onMilestoneEvent(
+        routeProgress: RouteProgress?,
+        instruction: String?,
+        milestone: Milestone?
+    ) {
+    }
+
+    override fun userOffRoute(location: Location?) {
+    }
 }

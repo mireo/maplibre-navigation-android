@@ -19,5 +19,5 @@ task accessToken {
 }
 
 gradle.projectsEvaluated {
-  preBuild.dependsOn('accessToken')
+    preBuild.dependsOn('accessToken')
 }

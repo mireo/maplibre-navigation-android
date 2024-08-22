@@ -1,19 +1,20 @@
 package com.mapbox.services.android.navigation.v5.utils;
 
+import static com.mapbox.services.android.navigation.v5.navigation.NavigationConstants.STEP_MANEUVER_TYPE_ARRIVE;
+
 import android.location.Location;
 
 import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
 
-import com.mapbox.api.directions.v5.DirectionsCriteria;
-import com.mapbox.api.directions.v5.models.BannerInstructions;
-import com.mapbox.api.directions.v5.models.BannerText;
-import com.mapbox.api.directions.v5.models.DirectionsRoute;
-import com.mapbox.api.directions.v5.models.LegStep;
-import com.mapbox.api.directions.v5.models.RouteLeg;
-import com.mapbox.api.directions.v5.models.RouteOptions;
-import com.mapbox.api.directions.v5.models.VoiceInstructions;
-import com.mapbox.core.utils.TextUtils;
+import com.mapbox.services.android.navigation.v5.models.BannerInstructions;
+import com.mapbox.services.android.navigation.v5.models.BannerText;
+import com.mapbox.services.android.navigation.v5.models.DirectionsCriteria;
+import com.mapbox.services.android.navigation.v5.models.DirectionsRoute;
+import com.mapbox.services.android.navigation.v5.models.LegStep;
+import com.mapbox.services.android.navigation.v5.models.RouteLeg;
+import com.mapbox.services.android.navigation.v5.models.RouteOptions;
+import com.mapbox.services.android.navigation.v5.models.VoiceInstructions;
 import com.mapbox.geojson.Point;
 import com.mapbox.services.android.navigation.v5.milestone.BannerInstructionMilestone;
 import com.mapbox.services.android.navigation.v5.milestone.Milestone;
@@ -26,8 +27,6 @@ import java.util.Comparator;
 import java.util.HashSet;
 import java.util.List;
 import java.util.Set;
-
-import static com.mapbox.services.android.navigation.v5.navigation.NavigationConstants.STEP_MANEUVER_TYPE_ARRIVE;
 
 public class RouteUtils {
 

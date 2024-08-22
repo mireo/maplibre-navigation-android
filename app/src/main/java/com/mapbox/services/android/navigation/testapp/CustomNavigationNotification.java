@@ -34,7 +34,7 @@ public class CustomNavigationNotification implements NavigationNotification {
         notificationManager = (NotificationManager) applicationContext.getSystemService(Context.NOTIFICATION_SERVICE);
 
         customNotificationBuilder = new NotificationCompat.Builder(applicationContext, NAVIGATION_NOTIFICATION_CHANNEL)
-                .setSmallIcon(R.drawable.ic_navigation)
+                .setSmallIcon(com.mapbox.services.android.navigation.ui.v5.R.drawable.ic_navigation)
                 .setContentTitle("Custom Navigation Notification")
                 .setContentText("Display your own content here!")
                 .setContentIntent(createPendingStopIntent(applicationContext));
@@ -68,7 +68,12 @@ public class CustomNavigationNotification implements NavigationNotification {
 
     public void register(BroadcastReceiver stopNavigationReceiver, Context applicationContext) {
         this.stopNavigationReceiver = stopNavigationReceiver;
-        applicationContext.registerReceiver(stopNavigationReceiver, new IntentFilter(STOP_NAVIGATION_ACTION));
+
+        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.TIRAMISU) {
+            applicationContext.registerReceiver(stopNavigationReceiver, new IntentFilter(STOP_NAVIGATION_ACTION), Context.RECEIVER_NOT_EXPORTED);
+        } else {
+            applicationContext.registerReceiver(stopNavigationReceiver, new IntentFilter(STOP_NAVIGATION_ACTION));
+        }
     }
 
     private PendingIntent createPendingStopIntent(Context context) {

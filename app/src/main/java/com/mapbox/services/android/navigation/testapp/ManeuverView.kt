@@ -2,7 +2,6 @@ package com.mapbox.services.android.navigation.testapp
 
 import android.app.Activity
 import android.content.Context
-import com.mapbox.api.directions.v5.models.RouteOptions
 import com.mapbox.services.android.navigation.v5.navigation.MapboxNavigationOptions
 import android.text.SpannableString
 import android.text.format.DateFormat
@@ -10,11 +9,12 @@ import android.view.View
 import com.mapbox.services.android.navigation.v5.utils.DistanceFormatter
 import android.widget.TextView
 import com.mapbox.services.android.navigation.v5.routeprogress.RouteProgress
-import com.mapbox.api.directions.v5.models.LegStep
 import android.view.ViewGroup
 import android.widget.ImageView
 import android.widget.RelativeLayout
 import com.mapbox.services.android.navigation.R
+import com.mapbox.services.android.navigation.v5.models.LegStep
+import com.mapbox.services.android.navigation.v5.models.RouteOptions
 import com.mapbox.services.android.navigation.v5.utils.LocaleUtils
 import com.mapbox.services.android.navigation.v5.utils.time.TimeFormatter
 import com.mapbox.services.android.navigation.v5.utils.ManeuverUtils

@@ -3,10 +3,10 @@ package com.mapbox.services.android.navigation.v5.navigation;
 import android.location.Location;
 import android.util.Pair;
 
-import com.mapbox.api.directions.v5.models.DirectionsRoute;
-import com.mapbox.api.directions.v5.models.LegStep;
-import com.mapbox.api.directions.v5.models.RouteLeg;
-import com.mapbox.api.directions.v5.models.StepIntersection;
+import com.mapbox.services.android.navigation.v5.models.DirectionsRoute;
+import com.mapbox.services.android.navigation.v5.models.LegStep;
+import com.mapbox.services.android.navigation.v5.models.RouteLeg;
+import com.mapbox.services.android.navigation.v5.models.StepIntersection;
 import com.mapbox.geojson.Point;
 import com.mapbox.services.android.navigation.v5.offroute.OffRoute;
 import com.mapbox.services.android.navigation.v5.offroute.OffRouteCallback;
@@ -28,7 +28,8 @@ import static com.mapbox.services.android.navigation.v5.navigation.NavigationHel
 import static com.mapbox.services.android.navigation.v5.navigation.NavigationHelper.legDistanceRemaining;
 import static com.mapbox.services.android.navigation.v5.navigation.NavigationHelper.routeDistanceRemaining;
 import static com.mapbox.services.android.navigation.v5.navigation.NavigationHelper.stepDistanceRemaining;
-import static com.mapbox.services.android.navigation.v5.navigation.NavigationHelper.userSnappedToRoutePosition;
+
+import androidx.annotation.NonNull;
 
 class NavigationRouteProcessor implements OffRouteCallback {
 
@@ -84,10 +85,13 @@ class NavigationRouteProcessor implements OffRouteCallback {
     MapboxNavigationOptions options = navigation.options();
     double completionOffset = options.maxTurnCompletionOffset();
     double maneuverZoneRadius = options.maneuverZoneRadius();
-    checkNewRoute(navigation);
+    boolean newRoute = checkNewRoute(navigation);
     stepDistanceRemaining = calculateStepDistanceRemaining(location, directionsRoute);
-    checkManeuverCompletion(navigation, location, directionsRoute, completionOffset, maneuverZoneRadius);
-    return assembleRouteProgress(directionsRoute);
+    if (!newRoute && routeProgress != null) {
+      checkManeuverCompletion(navigation, location, directionsRoute, completionOffset, maneuverZoneRadius);
+    }
+    routeProgress = assembleRouteProgress(directionsRoute);
+    return routeProgress;
   }
 
   RouteProgress getRouteProgress() {
@@ -118,13 +122,16 @@ class NavigationRouteProcessor implements OffRouteCallback {
    * data and {@link NavigationIndices} needs to be reset.
    *
    * @param mapboxNavigation to get the current route and off-route engine
+   * @return Whether or not a route progress is already set and {@link RouteUtils} determines this is a new route
    */
-  private void checkNewRoute(MapboxNavigation mapboxNavigation) {
+  private boolean checkNewRoute(@NonNull MapboxNavigation mapboxNavigation) {
     DirectionsRoute directionsRoute = mapboxNavigation.getRoute();
-    if (routeUtils.isNewRoute(routeProgress, directionsRoute)) {
+    boolean newRoute = routeUtils.isNewRoute(routeProgress, directionsRoute);
+    if (newRoute) {
       createFirstIndices(mapboxNavigation);
-      routeProgress = assembleRouteProgress(directionsRoute);
+      currentLegAnnotation = null;
     }
+    return newRoute;
   }
 
   /**
@@ -135,9 +142,8 @@ class NavigationRouteProcessor implements OffRouteCallback {
    * @return distance remaining in meters
    */
   private double calculateStepDistanceRemaining(Location location, DirectionsRoute directionsRoute) {
-    Point snappedPosition = userSnappedToRoutePosition(location, currentStepPoints);
     return stepDistanceRemaining(
-      snappedPosition, indices.legIndex(), indices.stepIndex(), directionsRoute, currentStepPoints
+      location, indices.legIndex(), indices.stepIndex(), directionsRoute, currentStepPoints
     );
   }
 
@@ -164,11 +170,16 @@ class NavigationRouteProcessor implements OffRouteCallback {
    * @param mapboxNavigation to get the next {@link LegStep#geometry()} and {@link OffRoute}
    */
   private void advanceIndices(MapboxNavigation mapboxNavigation) {
-    if(shouldUpdateToIndex != null){
-      indices = shouldUpdateToIndex;
-    }else{
-      indices = increaseIndex(routeProgress, indices);
+    NavigationIndices newIndices;
+    if (shouldUpdateToIndex != null) {
+      newIndices = shouldUpdateToIndex;
+    } else {
+      newIndices = increaseIndex(routeProgress, indices);
     }
+    if (newIndices.legIndex() != indices.legIndex()) {
+      currentLegAnnotation = null;
+    }
+    indices = newIndices;
     processNewIndex(mapboxNavigation);
   }
 

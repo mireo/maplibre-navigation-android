@@ -2,9 +2,9 @@ package com.mapbox.services.android.navigation.testapp;
 
 public class SampleItem {
 
-  private String name;
-  private String description;
-  private Class activity;
+  private final String name;
+  private final String description;
+  private final Class activity;
 
   public SampleItem(String name, String description, Class activity) {
     this.name = name;
