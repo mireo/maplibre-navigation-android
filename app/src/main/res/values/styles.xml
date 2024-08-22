@@ -45,4 +45,12 @@
         <item name="colorPrimaryDark">@color/colorPrimaryDark</item>
         <item name="colorAccent">@color/colorAccent</item>
     </style>
+
+    <style name="TestNavigationViewDark" parent="NavigationViewDark">
+        <item name="navigationViewMapStyle">@string/navigation_guidance_night</item>
+    </style>
+
+    <style name="TestNavigationViewLight" parent="NavigationViewLight">
+        <item name="navigationViewMapStyle">@string/navigation_guidance_day</item>
+    </style>
 </resources>

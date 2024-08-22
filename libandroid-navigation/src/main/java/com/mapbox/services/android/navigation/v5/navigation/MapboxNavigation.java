@@ -10,12 +10,12 @@ import android.os.IBinder;
 import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
 
-import com.mapbox.api.directions.v5.models.DirectionsRoute;
 import com.mapbox.mapboxsdk.location.engine.LocationEngine;
 import com.mapbox.services.android.navigation.v5.milestone.BannerInstructionMilestone;
 import com.mapbox.services.android.navigation.v5.milestone.Milestone;
 import com.mapbox.services.android.navigation.v5.milestone.MilestoneEventListener;
 import com.mapbox.services.android.navigation.v5.milestone.VoiceInstructionMilestone;
+import com.mapbox.services.android.navigation.v5.models.DirectionsRoute;
 import com.mapbox.services.android.navigation.v5.navigation.camera.Camera;
 import com.mapbox.services.android.navigation.v5.navigation.camera.SimpleCamera;
 import com.mapbox.services.android.navigation.v5.offroute.OffRoute;
@@ -31,10 +31,9 @@ import java.util.HashSet;
 import java.util.List;
 import java.util.Set;
 
-import retrofit2.Callback;
 import timber.log.Timber;
 
-import static com.mapbox.mapboxsdk.location.engine.LocationEngineProvider.getBestLocationEngine;
+import static com.mapbox.services.android.navigation.v5.location.engine.LocationEngineProvider.getBestLocationEngine;
 import static com.mapbox.services.android.navigation.v5.navigation.NavigationConstants.BANNER_INSTRUCTION_MILESTONE_ID;
 import static com.mapbox.services.android.navigation.v5.navigation.NavigationConstants.NON_NULL_APPLICATION_CONTEXT_REQUIRED;
 import static com.mapbox.services.android.navigation.v5.navigation.NavigationConstants.VOICE_INSTRUCTION_MILESTONE_ID;
@@ -718,6 +717,10 @@ public class MapboxNavigation implements ServiceConnection {
     Timber.d("Connected to service.");
     NavigationService.LocalBinder binder = (NavigationService.LocalBinder) service;
     navigationService = binder.getService();
+    if(navigationService == null){
+      //Since this is called when the Service is ready, the binder should always return a valid Service.
+      throw new IllegalStateException("NavigationService must not be null");
+    }
     navigationService.startNavigation(this);
     isBound = true;
   }
