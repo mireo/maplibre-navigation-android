@@ -7,11 +7,14 @@ public class SampleItem {
   private final Class activity;
   private final boolean local;
 
-  public SampleItem(String name, String description, Class activity, boolean loc) {
+  private final String langId;
+
+  public SampleItem(String name, String description, Class activity, boolean loc, String langId) {
     this.name = name;
     this.description = description;
     this.activity = activity;
     this.local = loc;
+    this.langId = langId;
   }
 
   public String getName() {
@@ -29,4 +32,5 @@ public class SampleItem {
   public boolean isLocal() {
     return local;
   }
+  public String getLangId() { return langId; }
 }

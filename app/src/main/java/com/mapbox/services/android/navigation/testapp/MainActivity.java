@@ -18,6 +18,7 @@ import com.mapbox.mapboxsdk.location.permissions.PermissionsManager;
 
 import java.util.ArrayList;
 import java.util.List;
+import java.util.Locale;
 
 public class MainActivity extends AppCompatActivity implements PermissionsListener {
     private RecyclerView recyclerView;
@@ -42,13 +43,22 @@ public class MainActivity extends AppCompatActivity implements PermissionsListen
                 getString(R.string.title_mock_navigation),
                 getString(R.string.description_mock_navigation),
                 MockNavigationActivity.class,
-                false
+                false,
+                ""
         ));
         list.add(new SampleItem(
                 getString(R.string.title_local_mock_navigation),
                 getString(R.string.description_local_mock_navigation),
                 MockNavigationActivity.class,
-                true
+                true,
+                ""
+        ));
+        list.add(new SampleItem(
+                getString(R.string.title_local_mock_navigation) + " - Taiwan",
+                getString(R.string.description_local_mock_navigation),
+                MockNavigationActivity.class,
+                true,
+                Locale.TRADITIONAL_CHINESE.getLanguage()
         ));
         RecyclerView.Adapter adapter = new MainAdapter(list);
         recyclerView.setAdapter(adapter);
@@ -120,6 +130,7 @@ public class MainActivity extends AppCompatActivity implements PermissionsListen
                 Intent intent = new Intent(clickedView.getContext(), samples.get(position).getActivity());
                 if (samples.get(position).isLocal())
                     intent.putExtra("localFolder", "/__A/");
+                intent.putExtra("languageId", samples.get(position).getLangId() );
                 startActivity(intent);
             });
 

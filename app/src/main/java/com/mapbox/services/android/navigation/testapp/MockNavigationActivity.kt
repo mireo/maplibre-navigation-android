@@ -84,15 +84,18 @@ class MockNavigationActivity :
 
     private lateinit var binding: ActivityMockNavigationBinding
 
+    private var languageId = ""
+
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         binding = ActivityMockNavigationBinding.inflate(layoutInflater)
         setContentView(binding.root)
 
-        startLocalServer(assets, "/__A/")
         if (intent != null) {
             val localFolder = intent.getStringExtra("localFolder")
             if (localFolder != null) {
+                languageId = intent.getStringExtra("languageId") ?: "";
+                startLocalServer(assets, "/__A/")
                 switchToLocal()
             }
         }
@@ -458,18 +461,27 @@ class MockNavigationActivity :
         ConnectivityReceiver.instance(applicationContext).setConnected(true)
     }
 
+
     var localServer = 0L
 
     private fun startLocalServer(assets: AssetManager, workDir: String) {
-        if (localServer == 0L) {
-            val writableDir = getExternalFilesDir(null).toString()
-            localServer = NativeServer.create(assets, "127.0.0.1:4242",
-                    workDir + "data/maps", workDir, workDir + "beast-maps.acp",
-                    writableDir, MAP_UPDATE_URL, null)
-            NativeServer.start(localServer, true)
-        }
+        if (localServer != 0L)
+            killLocalServer()
+        val writableDir = getExternalFilesDir(null).toString()
+        val config =
+            NativeServer.Configuration(
+                "127.0.0.1:4242",
+                languageId,
+                writableDir + "/beast-maps.acp",
+                "/__A/",
+                writableDir + "/data/maps",
+                writableDir,
+                null,
+                null
+            )
+        localServer = NativeServer.create(assets, config)
+        NativeServer.start(localServer, true)
     }
-
     private fun killLocalServer() {
         if (localServer != 0L) {
             NativeServer.stop(localServer)
