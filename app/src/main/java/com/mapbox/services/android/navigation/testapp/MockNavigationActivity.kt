@@ -479,6 +479,7 @@ class MockNavigationActivity :
                 null,
                 null
             )
+        NativeServer.setGlobalContext(this.applicationContext);
         localServer = NativeServer.create(assets, config)
         NativeServer.start(localServer, true)
     }
