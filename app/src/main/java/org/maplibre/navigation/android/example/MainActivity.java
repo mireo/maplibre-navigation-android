@@ -19,6 +19,8 @@ import org.maplibre.android.location.permissions.PermissionsManager;
 import java.util.ArrayList;
 import java.util.List;
 
+import hr.mireo.compactmaps.NativeServer;
+
 public class MainActivity extends AppCompatActivity implements PermissionsListener {
     private RecyclerView recyclerView;
     private PermissionsManager permissionsManager;
@@ -77,6 +79,9 @@ public class MainActivity extends AppCompatActivity implements PermissionsListen
             recyclerView.setEnabled(false);
             permissionsManager.requestLocationPermissions(this);
         }
+
+        startLocalServer();
+
     }
 
     @Override
@@ -102,6 +107,11 @@ public class MainActivity extends AppCompatActivity implements PermissionsListen
         }
     }
 
+    @Override
+    public void onDestroy() {
+        killLocalServer();
+        super.onDestroy();
+    }
     /*
      * Recycler view
      */
@@ -151,6 +161,34 @@ public class MainActivity extends AppCompatActivity implements PermissionsListen
         @Override
         public int getItemCount() {
             return samples.size();
+        }
+    }
+
+    long localServer;
+    private void startLocalServer() {
+        if (localServer != 0L)
+            killLocalServer();
+        String writableDir = getExternalFilesDir(null).toString();
+        NativeServer.Configuration config =
+                new NativeServer.Configuration(
+                        "127.0.0.1:4242",
+                        "en_US",
+                        writableDir + "/beast-maps.acp",
+                        "/__A/",
+                        writableDir + "/data/maps",
+                        writableDir,
+                        null,
+                        null
+                );
+        NativeServer.setGlobalContext(this);
+        localServer = NativeServer.create(getAssets(), config);
+        NativeServer.start(localServer, true);
+    }
+    private void killLocalServer() {
+        if (localServer != 0L) {
+            NativeServer.stop(localServer);
+            NativeServer.destroy(localServer);
+            localServer = 0;
         }
     }
 }

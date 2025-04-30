@@ -19,3 +19,4 @@ rootProject.name = "maplibre-navigation"
 include(":maplibre-navigation-core")
 include(":libandroid-navigation-ui")
 include(":app")
+include(":local-data")

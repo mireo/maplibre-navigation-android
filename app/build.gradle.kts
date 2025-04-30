@@ -58,6 +58,18 @@ android {
         preDexLibraries = true
     }
 
+    packaging {
+        jniLibs.pickFirsts.addAll(
+            listOf(
+                "**/armeabi-v7a/libmapbox-gl.so",
+                "**/x86/libmapbox-gl.so",
+                "**/arm64-v8a/libmapbox-gl.so",
+                "**/x86_64/libmapbox-gl.so",
+                "**/x86/libmapbox-gl.so"
+            )
+        )
+    }
+
     buildFeatures {
         viewBinding = true
     }
@@ -68,6 +80,8 @@ android {
 }
 
 dependencies {
+    implementation(files("libs/localserver-release.aar"))
+    implementation(project(":local-data"))
     implementation(project(":libandroid-navigation-ui"))
 
     implementation(libs.maplibre) {
