@@ -76,5 +76,9 @@ object ManeuverModifier {
          */
         @SerialName("sharp left")
         SHARP_LEFT("sharp left"),
+
+        @SerialName("")
+        NOTHING(""),
+
     }
 }
