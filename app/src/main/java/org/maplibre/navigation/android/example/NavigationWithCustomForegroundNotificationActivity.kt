@@ -147,16 +147,10 @@ class NavigationWithCustomForegroundNotificationActivity : AppCompatActivity(), 
             this.voiceUnits(UnitType.METRIC)
             this.alternatives(true)
             this.baseUrl(getString(R.string.base_url))
-            PreferenceManager.getDefaultSharedPreferences(this@NavigationWithCustomForegroundNotificationActivity)
-                .getStringSet("route_options", emptySet<String>())!!
-                .forEach { name ->
-                    when (name) {
-                        "avoid_toll" -> exclude(NavigationRoute.EXCLUDE_TOLL)
-                        "avoid_ferry" -> exclude(NavigationRoute.EXCLUDE_FERRY)
-                        "avoid_restricted" -> exclude(NavigationRoute.EXCLUDE_RESTRICTED)
-                        "avoid_highway" -> exclude(NavigationRoute.EXCLUDE_MOTORWAY)
-                    }
-                }
+            val avoid = PreferenceManager.getDefaultSharedPreferences(this@NavigationWithCustomForegroundNotificationActivity)
+                .getString("route_options", "")!!
+            if (avoid.isNotEmpty())
+                exclude(avoid)
         }
 
         navigationRouteBuilder.build().getRoute(object : Callback<DirectionsResponse> {

@@ -54,15 +54,15 @@
     <string-array name="route_options_array">
         <item>Avoid Toll Roads</item>
         <item>Avoid Ferries</item>
-        <item>Avoid Restricted Roads</item>
-        <item>Avoid Highways</item>
+        <item>Avoid Motorways</item>
+        <item>Avoid Tunnels</item>
     </string-array>
 
     <string-array name="route_options_values">
-        <item>avoid_toll</item>
-        <item>avoid_ferry</item>
-        <item>avoid_restricted</item>
-        <item>avoid_highway</item>
+        <item>toll</item>
+        <item>ferry</item>
+        <item>motorway</item>
+        <item>tunnel</item>
     </string-array>
 
 </resources>

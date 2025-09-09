@@ -192,17 +192,10 @@ class NavigationUIActivity :
             //this.user("gh")
             //this.profile("car")
             this.baseUrl(getString(R.string.base_url))
-
-            PreferenceManager.getDefaultSharedPreferences(this@NavigationUIActivity)
-                .getStringSet("route_options", emptySet<String>())!!
-                .forEach { name ->
-                    when (name) {
-                        "avoid_toll" -> exclude(NavigationRoute.EXCLUDE_TOLL)
-                        "avoid_ferry" -> exclude(NavigationRoute.EXCLUDE_FERRY)
-                        "avoid_restricted" -> exclude(NavigationRoute.EXCLUDE_RESTRICTED)
-                        "avoid_highway" -> exclude(NavigationRoute.EXCLUDE_MOTORWAY)
-                }
-            }
+            val avoid = PreferenceManager.getDefaultSharedPreferences(this@NavigationUIActivity)
+                .getString("route_options", "")!!
+            if (avoid.isNotEmpty())
+                exclude(avoid)
         }
 
 
