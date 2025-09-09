@@ -108,6 +108,8 @@ dependencies {
 
     implementation(libs.androidx.lifecycle.viewmodel)
     implementation(libs.androidx.multidex)
+    implementation(libs.androidx.appcompat)
+    implementation(libs.androidx.preference)
 }
 
 apply {

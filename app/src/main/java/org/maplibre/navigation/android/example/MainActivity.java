@@ -2,6 +2,7 @@ package org.maplibre.navigation.android.example;
 
 import android.content.Intent;
 import android.os.Bundle;
+import android.preference.PreferenceManager;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -10,6 +11,7 @@ import android.widget.Toast;
 
 import androidx.annotation.NonNull;
 import androidx.appcompat.app.AppCompatActivity;
+import androidx.preference.Preference;
 import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
 
@@ -25,6 +27,7 @@ public class MainActivity extends AppCompatActivity implements PermissionsListen
     private RecyclerView recyclerView;
     private PermissionsManager permissionsManager;
     private ArrayList<SampleItem> list = new ArrayList<>();
+    private String mOldLanguageCode ;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -70,6 +73,11 @@ public class MainActivity extends AppCompatActivity implements PermissionsListen
             getString(R.string.description_custom_foreground_notification),
             NavigationWithForegroundNotificationActivity.class
         ));
+        list.add(new SampleItem(
+                "Settings",
+                "Display application settings",
+                SettingsActivity.class
+        ));
         RecyclerView.Adapter adapter = new MainAdapter(list);
         recyclerView.setAdapter(adapter);
 
@@ -80,8 +88,7 @@ public class MainActivity extends AppCompatActivity implements PermissionsListen
             permissionsManager.requestLocationPermissions(this);
         }
 
-        startLocalServer();
-
+        mOldLanguageCode = "";
     }
 
     @Override
@@ -164,15 +171,37 @@ public class MainActivity extends AppCompatActivity implements PermissionsListen
         }
     }
 
+    private String getCurrentLanguage() {
+        var preferences = PreferenceManager.getDefaultSharedPreferences(this);
+        return preferences.getString("language", "en-US").replace("-", "_");
+    }
+
+    @Override
+    public void onResume() {
+
+		super.onResume();
+
+        checkLanguageChanged();
+
+	}
+
+    private void checkLanguageChanged() {
+        String language_code = getCurrentLanguage();
+        if (!mOldLanguageCode.equalsIgnoreCase(language_code)) {
+            startLocalServer();
+        }
+    }
+
     long localServer;
     private void startLocalServer() {
         if (localServer != 0L)
             killLocalServer();
         String writableDir = getExternalFilesDir(null).toString();
+        mOldLanguageCode = getCurrentLanguage();
         NativeServer.Configuration config =
                 new NativeServer.Configuration(
                         "127.0.0.1:4242",
-                        "en_US",
+                        mOldLanguageCode,
                         writableDir + "/beast-maps.acp",
                         "/__A/",
                         writableDir + "/data/maps",

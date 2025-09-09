@@ -13,6 +13,11 @@
         android:entries="@array/language_array"
         android:entryValues="@array/language_values_array"
         android:defaultValue="@string/default_locale"/>
+    <MultiSelectListPreference
+        android:entries="@array/route_options_array"
+        android:entryValues="@array/route_options_values"
+        android:key="route_options"
+        android:title="@string/route_options"/>
     <ListPreference
         android:key="@string/unit_type_key"
         android:title="@string/unit_type"

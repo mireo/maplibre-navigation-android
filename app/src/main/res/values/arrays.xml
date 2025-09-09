@@ -4,17 +4,17 @@
     <string-array name="language_array">
         <item>Default for Device</item>
         <item>English</item>
-        <item>French</item>
-        <item>German</item>
-        <item>Indonesian</item>
+        <item>中文 (Chinese)</item>
+        <item>हिन्दी (Hindi)</item>
+        <item>ไทย (Thai)</item>
     </string-array>
 
     <string-array name="language_values_array">
         <item>@string/default_locale</item>
-        <item>en</item>
-        <item>fr</item>
-        <item>de</item>
-        <item>in</item>
+        <item>en</item> <!-- English (United States) -->
+        <item>zh</item> <!-- Chinese (China, Simplified) -->
+        <item>hi</item> <!-- Hindi (India) -->
+        <item>th</item> <!-- Thai (Thailand) -->
     </string-array>
 
     <string-array name="unit_type_array">
@@ -40,4 +40,29 @@
         <item>cycling</item>
         <item>walking</item>
     </string-array>
+    <!-- Reply Preference -->
+    <string-array name="reply_entries">
+        <item>Reply</item>
+        <item>Reply to all</item>
+    </string-array>
+
+    <string-array name="reply_values">
+        <item>reply</item>
+        <item>reply_all</item>
+    </string-array>
+
+    <string-array name="route_options_array">
+        <item>Avoid Toll Roads</item>
+        <item>Avoid Ferries</item>
+        <item>Avoid Restricted Roads</item>
+        <item>Avoid Highways</item>
+    </string-array>
+
+    <string-array name="route_options_values">
+        <item>avoid_toll</item>
+        <item>avoid_ferry</item>
+        <item>avoid_restricted</item>
+        <item>avoid_highway</item>
+    </string-array>
+
 </resources>

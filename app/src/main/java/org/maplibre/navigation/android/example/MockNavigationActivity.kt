@@ -4,13 +4,13 @@ import android.annotation.SuppressLint
 import android.content.BroadcastReceiver
 import android.content.Context
 import android.content.Intent
-import android.os.Build
 import android.os.Bundle
+import android.preference.PreferenceManager
 import android.view.View
 import android.widget.Toast
 import androidx.appcompat.app.AppCompatActivity
 import com.google.android.material.snackbar.Snackbar
-import org.maplibre.navigation.core.models.DirectionsResponse
+import okhttp3.Request
 import org.maplibre.android.annotations.MarkerOptions
 import org.maplibre.android.camera.CameraUpdateFactory
 import org.maplibre.android.geometry.LatLng
@@ -21,29 +21,29 @@ import org.maplibre.android.location.modes.RenderMode
 import org.maplibre.android.maps.MapLibreMap
 import org.maplibre.android.maps.OnMapReadyCallback
 import org.maplibre.android.maps.Style
-import org.maplibre.navigation.android.navigation.ui.v5.route.NavigationRoute
-import org.maplibre.navigation.core.location.replay.ReplayRouteLocationEngine
-import org.maplibre.navigation.core.models.DirectionsRoute
-import org.maplibre.navigation.core.offroute.OffRouteListener
-import org.maplibre.navigation.core.routeprogress.ProgressChangeListener
-import org.maplibre.navigation.core.routeprogress.RouteProgress
-import org.maplibre.turf.TurfConstants
-import org.maplibre.turf.TurfMeasurement
-import okhttp3.Request
+import org.maplibre.geojson.Point
 import org.maplibre.navigation.android.example.databinding.ActivityMockNavigationBinding
 import org.maplibre.navigation.android.navigation.ui.v5.route.NavigationMapRoute
+import org.maplibre.navigation.android.navigation.ui.v5.route.NavigationRoute
 import org.maplibre.navigation.core.instruction.Instruction
 import org.maplibre.navigation.core.location.Location
+import org.maplibre.navigation.core.location.replay.ReplayRouteLocationEngine
 import org.maplibre.navigation.core.milestone.Milestone
 import org.maplibre.navigation.core.milestone.MilestoneEventListener
 import org.maplibre.navigation.core.milestone.RouteMilestone
 import org.maplibre.navigation.core.milestone.Trigger
 import org.maplibre.navigation.core.milestone.TriggerProperty
+import org.maplibre.navigation.core.models.DirectionsResponse
+import org.maplibre.navigation.core.models.DirectionsRoute
 import org.maplibre.navigation.core.models.UnitType
 import org.maplibre.navigation.core.navigation.AndroidMapLibreNavigation
 import org.maplibre.navigation.core.navigation.MapLibreNavigation
 import org.maplibre.navigation.core.navigation.NavigationEventListener
-import org.maplibre.geojson.Point
+import org.maplibre.navigation.core.offroute.OffRouteListener
+import org.maplibre.navigation.core.routeprogress.ProgressChangeListener
+import org.maplibre.navigation.core.routeprogress.RouteProgress
+import org.maplibre.turf.TurfConstants
+import org.maplibre.turf.TurfMeasurement
 import retrofit2.Call
 import retrofit2.Callback
 import retrofit2.Response
@@ -207,6 +207,7 @@ class MockNavigationActivity :
         return true
     }
 
+
     private fun calculateRoute() {
         val userLocation = locationEngine.lastLocation
         val destination = destination
@@ -232,6 +233,16 @@ class MockNavigationActivity :
             this.voiceUnits(UnitType.METRIC)
             this.alternatives(true)
             this.baseUrl(getString(R.string.base_url))
+            PreferenceManager.getDefaultSharedPreferences(this@MockNavigationActivity)
+                .getStringSet("route_options", emptySet<String>())!!
+                .forEach { name ->
+                    when (name) {
+                        "avoid_toll" -> exclude(NavigationRoute.EXCLUDE_TOLL)
+                        "avoid_ferry" -> exclude(NavigationRoute.EXCLUDE_FERRY)
+                        "avoid_restricted" -> exclude(NavigationRoute.EXCLUDE_RESTRICTED)
+                        "avoid_highway" -> exclude(NavigationRoute.EXCLUDE_MOTORWAY)
+                    }
+                }
         }
 
         navigationRouteBuilder.build().getRoute(object : Callback<DirectionsResponse> {
@@ -329,7 +340,7 @@ class MockNavigationActivity :
 
     private fun newOrigin() {
         mapLibreMap.let {
-            val latLng = LatLng(52.039176, 5.550339)
+            val latLng = LatLng(45.746060, 15.996740)
             locationEngine.assignLastLocation(
                 Point.fromLngLat(latLng.longitude, latLng.latitude),
             )

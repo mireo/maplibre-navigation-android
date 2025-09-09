@@ -2,6 +2,7 @@ package org.maplibre.navigation.android.example
 
 import android.annotation.SuppressLint
 import android.os.Bundle
+import android.preference.PreferenceManager
 import android.view.View
 import android.widget.Toast
 import androidx.appcompat.app.AppCompatActivity
@@ -191,7 +192,19 @@ class NavigationUIActivity :
             //this.user("gh")
             //this.profile("car")
             this.baseUrl(getString(R.string.base_url))
+
+            PreferenceManager.getDefaultSharedPreferences(this@NavigationUIActivity)
+                .getStringSet("route_options", emptySet<String>())!!
+                .forEach { name ->
+                    when (name) {
+                        "avoid_toll" -> exclude(NavigationRoute.EXCLUDE_TOLL)
+                        "avoid_ferry" -> exclude(NavigationRoute.EXCLUDE_FERRY)
+                        "avoid_restricted" -> exclude(NavigationRoute.EXCLUDE_RESTRICTED)
+                        "avoid_highway" -> exclude(NavigationRoute.EXCLUDE_MOTORWAY)
+                }
+            }
         }
+
 
         navigationRouteBuilder.build().getRoute(object : Callback<DirectionsResponse> {
             override fun onResponse(

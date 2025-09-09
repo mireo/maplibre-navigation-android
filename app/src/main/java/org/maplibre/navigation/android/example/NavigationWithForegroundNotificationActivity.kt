@@ -2,6 +2,7 @@ package org.maplibre.navigation.android.example
 
 import android.location.Location as AndroidLocation
 import android.os.Bundle
+import android.preference.PreferenceManager
 import androidx.appcompat.app.AppCompatActivity
 import org.maplibre.navigation.core.models.DirectionsResponse
 import org.maplibre.geojson.Point
@@ -146,6 +147,16 @@ class NavigationWithForegroundNotificationActivity : AppCompatActivity(), OnMapR
             this.voiceUnits(UnitType.METRIC)
             this.alternatives(true)
             this.baseUrl(getString(R.string.base_url))
+            PreferenceManager.getDefaultSharedPreferences(this@NavigationWithForegroundNotificationActivity)
+                .getStringSet("route_options", emptySet<String>())!!
+                .forEach { name ->
+                    when (name) {
+                        "avoid_toll" -> exclude(NavigationRoute.EXCLUDE_TOLL)
+                        "avoid_ferry" -> exclude(NavigationRoute.EXCLUDE_FERRY)
+                        "avoid_restricted" -> exclude(NavigationRoute.EXCLUDE_RESTRICTED)
+                        "avoid_highway" -> exclude(NavigationRoute.EXCLUDE_MOTORWAY)
+                    }
+                }
         }
 
         navigationRouteBuilder.build().getRoute(object : Callback<DirectionsResponse> {
