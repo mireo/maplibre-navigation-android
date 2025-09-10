@@ -17,11 +17,13 @@ import androidx.recyclerview.widget.RecyclerView;
 
 import org.maplibre.android.location.permissions.PermissionsListener;
 import org.maplibre.android.location.permissions.PermissionsManager;
+import org.maplibre.android.offline.OfflineManager;
 
 import java.util.ArrayList;
 import java.util.List;
 
 import hr.mireo.compactmaps.NativeServer;
+import timber.log.Timber;
 
 public class MainActivity extends AppCompatActivity implements PermissionsListener {
     private RecyclerView recyclerView;
@@ -188,6 +190,17 @@ public class MainActivity extends AppCompatActivity implements PermissionsListen
     private void checkLanguageChanged() {
         String language_code = getCurrentLanguage();
         if (!mOldLanguageCode.equalsIgnoreCase(language_code)) {
+            OfflineManager.getInstance(this).clearAmbientCache(new OfflineManager.FileSourceCallback() {
+                @Override
+                public void onSuccess() {
+                    Timber.d("Cache cleared");
+                }
+
+                @Override
+                public void onError(@NonNull String s) {
+                    Timber.e("Cache NOT cleared, error; %s", s);
+                }
+            });
             startLocalServer();
         }
     }
