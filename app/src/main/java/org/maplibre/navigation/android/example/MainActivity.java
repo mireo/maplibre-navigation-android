@@ -15,9 +15,11 @@ import androidx.preference.Preference;
 import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
 
+import org.maplibre.android.MapLibre;
 import org.maplibre.android.location.permissions.PermissionsListener;
 import org.maplibre.android.location.permissions.PermissionsManager;
 import org.maplibre.android.offline.OfflineManager;
+import org.maplibre.navigation.android.navigation.ui.v5.ConnectivityStatusProvider;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -91,6 +93,8 @@ public class MainActivity extends AppCompatActivity implements PermissionsListen
         }
 
         mOldLanguageCode = "";
+
+        MapLibre.setConnected(true);
     }
 
     @Override
