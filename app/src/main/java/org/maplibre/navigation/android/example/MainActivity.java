@@ -11,7 +11,6 @@ import android.widget.Toast;
 
 import androidx.annotation.NonNull;
 import androidx.appcompat.app.AppCompatActivity;
-import androidx.preference.Preference;
 import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
 
@@ -19,7 +18,6 @@ import org.maplibre.android.MapLibre;
 import org.maplibre.android.location.permissions.PermissionsListener;
 import org.maplibre.android.location.permissions.PermissionsManager;
 import org.maplibre.android.offline.OfflineManager;
-import org.maplibre.navigation.android.navigation.ui.v5.ConnectivityStatusProvider;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -36,6 +34,7 @@ public class MainActivity extends AppCompatActivity implements PermissionsListen
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
+
         setContentView(R.layout.activity_main);
 
         // RecyclerView
@@ -95,6 +94,8 @@ public class MainActivity extends AppCompatActivity implements PermissionsListen
         mOldLanguageCode = "";
 
         MapLibre.setConnected(true);
+        if (BuildConfig.DEBUG)
+            Utils.enableOkHttpClientLogging(true);
     }
 
     @Override
@@ -213,6 +214,9 @@ public class MainActivity extends AppCompatActivity implements PermissionsListen
     private void startLocalServer() {
         if (localServer != 0L)
             killLocalServer();
+
+        Timber.d("Device ID: %s", NativeServer.getDeviceId());
+
         String writableDir = getExternalFilesDir(null).toString();
         mOldLanguageCode = getCurrentLanguage();
         NativeServer.Configuration config =

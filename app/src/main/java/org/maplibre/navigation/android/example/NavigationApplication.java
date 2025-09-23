@@ -2,7 +2,6 @@ package org.maplibre.navigation.android.example;
 
 import android.app.Application;
 
-import org.maplibre.android.BuildConfig;
 import org.maplibre.android.MapLibre;
 
 import timber.log.Timber;

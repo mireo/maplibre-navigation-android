@@ -12,9 +12,13 @@ import androidx.core.content.res.ResourcesCompat;
 import org.maplibre.android.annotations.Icon;
 import org.maplibre.android.annotations.IconFactory;
 import org.maplibre.android.geometry.LatLng;
+import org.maplibre.android.module.http.HttpRequestUtil;
 
 import java.util.Random;
+import java.util.concurrent.TimeUnit;
 
+import okhttp3.OkHttpClient;
+import okhttp3.logging.HttpLoggingInterceptor;
 import timber.log.Timber;
 
 public class Utils {
@@ -41,5 +45,20 @@ public class Utils {
     LatLng latLng = new LatLng(randomLat, randomLon);
     Timber.d("getRandomLatLng: %s", latLng.toString());
     return latLng;
+  }
+
+  public static void enableOkHttpClientLogging(boolean enable) {
+    if (!enable) {
+      HttpRequestUtil.setOkHttpClient(null);
+      return;
+    }
+    HttpLoggingInterceptor logging = new HttpLoggingInterceptor(message -> Timber.tag("[HTTP]").d(message));
+    logging.setLevel(HttpLoggingInterceptor.Level.HEADERS);
+    OkHttpClient ok = new OkHttpClient.Builder()
+            .addInterceptor(logging)
+            .connectTimeout(30, TimeUnit.SECONDS)
+            .readTimeout(30, TimeUnit.SECONDS)
+            .build();
+    HttpRequestUtil.setOkHttpClient(ok);
   }
 }
